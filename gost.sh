@@ -3,7 +3,7 @@ Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_p
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 shell_version="1.1.1"
-ct_new_ver="2.12.0" # 2.x 不再跟随官方更新
+ct_new_ver="2.11.2" # 2.x 不再跟随官方更新
 gost_conf_path="/etc/gost/config.json"
 raw_conf_path="/etc/gost/rawconf"
 function checknew() {
@@ -65,7 +65,7 @@ function check_new_ver() {
   # deprecated
   ct_new_ver=$(wget --no-check-certificate -qO- -t2 -T3 https://api.github.com/repos/ginuerzh/gost/releases/latest | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g;s/v//g')
   if [[ -z ${ct_new_ver} ]]; then
-    ct_new_ver="2.12.0"
+    ct_new_ver="2.11.2"
     echo -e "${Error} gost 最新版本获取失败，正在下载v${ct_new_ver}版"
   else
     echo -e "${Info} gost 目前最新版本为 ${ct_new_ver}"
@@ -98,17 +98,18 @@ function Install_ct() {
   if [[ ${addyn} == [Yy] ]]; then
     rm -rf gost_"$ct_new_ver"_linux_"$bit".tar.gz
     wget --no-check-certificate https://dl.sswiwi.com/gost/gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    gunzip gost_"$ct_new_ver"_linux_"$bit".tar.gz
+    tar -xzvf gost_"$ct_new_ver"_linux_"$bit".tar.gz
+    rm LICENSE README.md README_en.md
     mv gost-linux-"$bit"-"$ct_new_ver" gost
     mv gost /usr/bin/gost
     chmod -R 777 /usr/bin/gost
     wget --no-check-certificate https://dl.sswiwi.com/gost/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
     mkdir /etc/gost && wget --no-check-certificate https://dl.sswiwi.com/gost/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
-    mkdir /etc/gost && wget --no-check-certificate https://dl.sswiwi.com/gost/rawconf && mv rawconf /etc/gost && chmod -R 777 /etc/gost
   else
     rm -rf gost_"$ct_new_ver"_linux_"$bit".tar.gz
     wget --no-check-certificate https://github.com/ginuerzh/gost/releases/download/v"$ct_new_ver"/gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    gunzip gost_"$ct_new_ver"_linux_"$bit".tar.gz
+    tar -xzvf gost_"$ct_new_ver"_linux_"$bit".tar.gz
+    rm LICENSE README.md README_en.md
     mv gost-linux-"$bit"-"$ct_new_ver" gost
     mv gost /usr/bin/gost
     chmod -R 777 /usr/bin/gost
