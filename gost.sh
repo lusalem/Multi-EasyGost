@@ -99,7 +99,7 @@ function Install_ct() {
     rm -rf gost_"$ct_new_ver"_linux_"$bit".tar.gz
     wget --no-check-certificate https://dl.sswiwi.com/gost/gost_"$ct_new_ver"_linux_"$bit".tar.gz
     tar -xzvf gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    rm LICENSE README.md README_en.md
+    rm LICENSE README.md README_en.md gost_"$ct_new_ver"_linux_"$bit".tar.gz
     mv gost-linux-"$bit"-"$ct_new_ver" gost
     mv gost /usr/bin/gost
     chmod -R 777 /usr/bin/gost
@@ -109,7 +109,7 @@ function Install_ct() {
     rm -rf gost_"$ct_new_ver"_linux_"$bit".tar.gz
     wget --no-check-certificate https://github.com/ginuerzh/gost/releases/download/v"$ct_new_ver"/gost_"$ct_new_ver"_linux_"$bit".tar.gz
     tar -xzvf gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    rm LICENSE README.md README_en.md
+    rm LICENSE README.md README_en.md gost_"$ct_new_ver"_linux_"$bit".tar.gz
     mv gost-linux-"$bit"-"$ct_new_ver" gost
     mv gost /usr/bin/gost
     chmod -R 777 /usr/bin/gost
