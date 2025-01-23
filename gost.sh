@@ -97,13 +97,14 @@ function Install_ct() {
   [[ -z ${addyn} ]] && addyn="n"
   if [[ ${addyn} == [Yy] ]]; then
     rm -rf gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    wget --no-check-certificate https://gotunnel.oss-cn-shenzhen.aliyuncs.com/gost_"$ct_new_ver"_linux_"$bit".tar.gz
+    wget --no-check-certificate https://dl.sswiwi.com/gost/gost_"$ct_new_ver"_linux_"$bit".tar.gz
     gunzip gost_"$ct_new_ver"_linux_"$bit".tar.gz
     mv gost-linux-"$bit"-"$ct_new_ver" gost
     mv gost /usr/bin/gost
     chmod -R 777 /usr/bin/gost
-    wget --no-check-certificate https://gotunnel.oss-cn-shenzhen.aliyuncs.com/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
-    mkdir /etc/gost && wget --no-check-certificate https://gotunnel.oss-cn-shenzhen.aliyuncs.com/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
+    wget --no-check-certificate https://dl.sswiwi.com/gost/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
+    mkdir /etc/gost && wget --no-check-certificate https://dl.sswiwi.com/gost/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
+    mkdir /etc/gost && wget --no-check-certificate https://dl.sswiwi.com/gost/rawconf && mv rawconf /etc/gost && chmod -R 777 /etc/gost
   else
     rm -rf gost_"$ct_new_ver"_linux_"$bit".tar.gz
     wget --no-check-certificate https://github.com/ginuerzh/gost/releases/download/v"$ct_new_ver"/gost_"$ct_new_ver"_linux_"$bit".tar.gz
