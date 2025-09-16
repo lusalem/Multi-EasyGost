@@ -7,7 +7,7 @@ ct_new_ver="2.11.5" # 2.x 不再跟随官方更新
 gost_conf_path="/etc/gost/config.json"
 raw_conf_path="/etc/gost/rawconf"
 function checknew() {
-  checknew=$(gost -V 2>&1 | awk '{print $2}')
+  checknew=$(gostv2 -V 2>&1 | awk '{print $2}')
   # check_new_ver
   echo "你的gost版本为:""$checknew"""
   echo -n 是否更新\(y/n\)\:
@@ -17,7 +17,7 @@ function checknew() {
     Install_ct
     rm -rf /etc/gost
     mv /tmp/gost /etc/
-    systemctl restart gost
+    systemctl restart gostv2
   else
     exit 0
   fi
@@ -66,9 +66,9 @@ function check_new_ver() {
   ct_new_ver=$(wget --no-check-certificate -qO- -t2 -T3 https://api.github.com/repos/ginuerzh/gost/releases/latest | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g;s/v//g')
   if [[ -z ${ct_new_ver} ]]; then
     ct_new_ver="2.11.5"
-    echo -e "${Error} gost 最新版本获取失败，正在下载v${ct_new_ver}版"
+    echo -e "${Error} gostv2 最新版本获取失败，正在下载v${ct_new_ver}版"
   else
-    echo -e "${Info} gost 目前最新版本为 ${ct_new_ver}"
+    echo -e "${Info} gostv2 目前最新版本为 ${ct_new_ver}"
   fi
 }
 function check_file() {
@@ -115,7 +115,7 @@ function Install_ct() {
     mkdir /etc/gost && wget --no-check-certificate https://raw.githubusercontent.com/lusalem/Multi-EasyGost/master/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
   fi
 
-  systemctl enable gost && systemctl restart gost
+  systemctl enable gostv2 && systemctl restart gostv2
   echo "------------------------------"
   if test -a /usr/bin/gostv2 -a /usr/lib/systemctl/gostv2.service -a /etc/gost/config.json; then
     echo "gost安装成功"
@@ -138,11 +138,11 @@ function Uninstall_ct() {
   echo "gost已经成功删除"
 }
 function Start_ct() {
-  systemctl start gost
+  systemctl start gostv2
   echo "已启动"
 }
 function Stop_ct() {
-  systemctl stop gost
+  systemctl stop gostv2
   echo "已停止"
 }
 function Restart_ct() {
@@ -150,7 +150,7 @@ function Restart_ct() {
   confstart
   writeconf
   conflast
-  systemctl restart gost
+  systemctl restart gostv2
   echo "已重读配置并重启"
 }
 function read_protocol() {
@@ -851,12 +851,12 @@ cron_restart() {
     if [ "$numcrontype" == "1" ]; then
       echo -e "-----------------------------------"
       read -p "每？小时重启: " cronhr
-      echo "0 0 */$cronhr * * ? * systemctl restart gost" >>/etc/crontab
+      echo "0 0 */$cronhr * * ? * systemctl restart gostv2" >>/etc/crontab
       echo -e "定时重启设置成功！"
     elif [ "$numcrontype" == "2" ]; then
       echo -e "-----------------------------------"
       read -p "每日？点重启: " cronhr
-      echo "0 0 $cronhr * * ? systemctl restart gost" >>/etc/crontab
+      echo "0 0 $cronhr * * ? systemctl restart gostv2" >>/etc/crontab
       echo -e "定时重启设置成功！"
     else
       echo "type error, please try again"
@@ -944,7 +944,7 @@ case "$num" in
   confstart
   writeconf
   conflast
-  systemctl restart gost
+  systemctl restart gostv2
   echo -e "配置已生效，当前配置如下"
   echo -e "--------------------------------------------------------"
   show_all_conf
@@ -961,7 +961,7 @@ case "$num" in
     confstart
     writeconf
     conflast
-    systemctl restart gost
+    systemctl restart gostv2
     echo -e "配置已删除，服务已重启"
   else
     echo "请输入正确数字"
