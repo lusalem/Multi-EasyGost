@@ -133,6 +133,7 @@ function Install_ct() {
 function Uninstall_ct() {
   rm -rf /usr/bin/gostv2
   rm -rf /usr/lib/systemd/system/gostv2.service
+  rm -rf /usr/lib/systemd/system/gostv2.service
   rm -rf /etc/gost
   rm -rf "$(pwd)"/gost.sh
   echo "gost已经成功删除"
