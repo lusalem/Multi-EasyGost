@@ -83,7 +83,7 @@ function check_nor_file() {
   rm -rf "$(pwd)"/config.json
   rm -rf /etc/gost
   rm -rf /usr/lib/systemd/system/gostv2.service
-  rm -rf /usr/bin/gost
+  rm -rf /usr/bin/gostv2
 }
 function Install_ct() {
   check_root
@@ -117,7 +117,7 @@ function Install_ct() {
 
   systemctl enable gost && systemctl restart gost
   echo "------------------------------"
-  if test -a /usr/bin/gost -a /usr/lib/systemctl/gostv2.service -a /etc/gost/config.json; then
+  if test -a /usr/bin/gostv2 -a /usr/lib/systemctl/gostv2.service -a /etc/gost/config.json; then
     echo "gost安装成功"
     rm -rf "$(pwd)"/gost
     rm -rf "$(pwd)"/gostv2.service
@@ -131,7 +131,7 @@ function Install_ct() {
   fi
 }
 function Uninstall_ct() {
-  rm -rf /usr/bin/gost
+  rm -rf /usr/bin/gostv2
   rm -rf /usr/lib/systemd/system/gostv2.service
   rm -rf /etc/gost
   rm -rf "$(pwd)"/gost.sh
