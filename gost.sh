@@ -3,7 +3,7 @@ Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_p
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 shell_version="1.1.1"
-ct_new_ver="3.2.4" # 2.x 不再跟随官方更新
+ct_new_ver="2.11.5" # 2.x 不再跟随官方更新
 gost_conf_path="/etc/gost/config.json"
 raw_conf_path="/etc/gost/rawconf"
 function checknew() {
@@ -63,9 +63,9 @@ function check_root() {
 }
 function check_new_ver() {
   # deprecated
-  ct_new_ver=$(wget --no-check-certificate https://api.github.com/repos/go-gost/gost/releases/latest | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g;s/v//g')
+  ct_new_ver=$(wget --no-check-certificate -qO- -t2 -T3 https://api.github.com/repos/ginuerzh/gost/releases/latest | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g;s/v//g')
   if [[ -z ${ct_new_ver} ]]; then
-    ct_new_ver="3.2.4"
+    ct_new_ver="2.11.5"
     echo -e "${Error} gost 最新版本获取失败，正在下载v${ct_new_ver}版"
   else
     echo -e "${Info} gost 目前最新版本为 ${ct_new_ver}"
@@ -79,10 +79,10 @@ function check_file() {
 }
 function check_nor_file() {
   rm -rf "$(pwd)"/gost
-  rm -rf "$(pwd)"/gost.service
+  rm -rf "$(pwd)"/gostv2.service
   rm -rf "$(pwd)"/config.json
   rm -rf /etc/gost
-  rm -rf /usr/lib/systemd/system/gost.service
+  rm -rf /usr/lib/systemd/system/gostv2.service
   rm -rf /usr/bin/gost
 }
 function Install_ct() {
@@ -96,41 +96,43 @@ function Install_ct() {
   read -e -p "是否使用？[y/n]:" addyn
   [[ -z ${addyn} ]] && addyn="n"
   if [[ ${addyn} == [Yy] ]]; then
-    rm -rf gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    wget --no-check-certificate https://gotunnel.oss-cn-shenzhen.aliyuncs.com/gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    tar zxf gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    mv gost /usr/bin/gost
-    chmod -R 777 /usr/bin/gost
-    wget --no-check-certificate https://gotunnel.oss-cn-shenzhen.aliyuncs.com/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
+    rm -rf gost-linux-"$bit"-"$ct_new_ver".gz
+    wget --no-check-certificate https://gotunnel.oss-cn-shenzhen.aliyuncs.com/gost-linux-"$bit"-"$ct_new_ver".gz
+    gunzip gost-linux-"$bit"-"$ct_new_ver".gz
+    mv gost-linux-"$bit"-"$ct_new_ver" gostv2
+    mv gostv2 /usr/bin/gostv2
+    chmod -R 777 /usr/bin/gostv2
+    wget --no-check-certificate https://gotunnel.oss-cn-shenzhen.aliyuncs.com/gostv2.service && chmod -R 777 gostv2.service && mv gostv2.service /usr/lib/systemd/system
     mkdir /etc/gost && wget --no-check-certificate https://gotunnel.oss-cn-shenzhen.aliyuncs.com/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
   else
-    rm -rf gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    wget --no-check-certificate https://github.com/go-gost/gost/releases/download/v"$ct_new_ver"/gost_"$ct_new_ver"_linux_"$bit".tar.gz
-    tar zxf gost_"$ct_new_ver"_linux_"$bit".tar.gz
-	mv gost /usr/bin/gost
-    chmod -R 777 /usr/bin/gost
-    wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.service && chmod -R 777 gost.service && mv gost.service /usr/lib/systemd/system
+    rm -rf gost-linux-"$bit"-"$ct_new_ver".gz
+    wget --no-check-certificate https://github.com/ginuerzh/gost/releases/download/v"$ct_new_ver"/gost-linux-"$bit"-"$ct_new_ver".gz
+    gunzip gost-linux-"$bit"-"$ct_new_ver".gz
+    mv gost-linux-"$bit"-"$ct_new_ver" gostv2
+    mv gostv2 /usr/bin/gostv2
+    chmod -R 777 /usr/bin/gostv2
+    wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gostv2.service && chmod -R 777 gostv2.service && mv gostv2.service /usr/lib/systemd/system
     mkdir /etc/gost && wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
   fi
 
   systemctl enable gost && systemctl restart gost
   echo "------------------------------"
-  if test -a /usr/bin/gost -a /usr/lib/systemctl/gost.service -a /etc/gost/config.json; then
+  if test -a /usr/bin/gost -a /usr/lib/systemctl/gostv2.service -a /etc/gost/config.json; then
     echo "gost安装成功"
     rm -rf "$(pwd)"/gost
-    rm -rf "$(pwd)"/gost.service
+    rm -rf "$(pwd)"/gostv2.service
     rm -rf "$(pwd)"/config.json
   else
     echo "gost没有安装成功"
     rm -rf "$(pwd)"/gost
-    rm -rf "$(pwd)"/gost.service
+    rm -rf "$(pwd)"/gostv2.service
     rm -rf "$(pwd)"/config.json
     rm -rf "$(pwd)"/gost.sh
   fi
 }
 function Uninstall_ct() {
   rm -rf /usr/bin/gost
-  rm -rf /usr/lib/systemd/system/gost.service
+  rm -rf /usr/lib/systemd/system/gostv2.service
   rm -rf /etc/gost
   rm -rf "$(pwd)"/gost.sh
   echo "gost已经成功删除"
