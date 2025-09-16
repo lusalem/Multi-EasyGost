@@ -111,8 +111,8 @@ function Install_ct() {
     mv gost-linux-"$bit"-"$ct_new_ver" gostv2
     mv gostv2 /usr/bin/gostv2
     chmod -R 777 /usr/bin/gostv2
-    wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gostv2.service && chmod -R 777 gostv2.service && mv gostv2.service /usr/lib/systemd/system
-    mkdir /etc/gost && wget --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
+    wget --no-check-certificate https://raw.githubusercontent.com/lusalem/Multi-EasyGost/master/gostv2.service && chmod -R 777 gostv2.service && mv gostv2.service /usr/lib/systemd/system
+    mkdir /etc/gost && wget --no-check-certificate https://raw.githubusercontent.com/lusalem/Multi-EasyGost/master/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
   fi
 
   systemctl enable gost && systemctl restart gost
@@ -296,7 +296,7 @@ function read_d_ip() {
     echo -e "------------------------------------------------------------------"
     echo -e "请问你要将本机从${flag_b}接收到的流量转发向哪个IP或域名?"
     echo -e "注: IP既可以是[远程机器/当前机器]的公网IP, 也可是以本机本地回环IP(即127.0.0.1)"
-    echo -e "具体IP地址的填写, 取决于接收该流量的服务正在监听的IP(详见: https://github.com/KANIKIG/Multi-EasyGost)"
+    echo -e "具体IP地址的填写, 取决于接收该流量的服务正在监听的IP(详见: https://github.com/lusalem/Multi-EasyGost)"
     if [[ ${is_cert} == [Yy] ]]; then
       echo -e "注意: 落地机开启自定义tls证书，务必填写${Red_font_prefix}域名${Font_color_suffix}"
     fi
@@ -872,14 +872,14 @@ cron_restart() {
 }
 
 update_sh() {
-  ol_version=$(curl -L -s --connect-timeout 5 https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.sh | grep "shell_version=" | head -1 | awk -F '=|"' '{print $3}')
+  ol_version=$(curl -L -s --connect-timeout 5 https://raw.githubusercontent.com/lusalem/Multi-EasyGost/master/gost.sh | grep "shell_version=" | head -1 | awk -F '=|"' '{print $3}')
   if [ -n "$ol_version" ]; then
     if [[ "$shell_version" != "$ol_version" ]]; then
       echo -e "存在新版本，是否更新 [Y/N]?"
       read -r update_confirm
       case $update_confirm in
       [yY][eE][sS] | [yY])
-        wget -N --no-check-certificate https://raw.githubusercontent.com/KANIKIG/Multi-EasyGost/master/gost.sh
+        wget -N --no-check-certificate https://raw.githubusercontent.com/lusalem/Multi-EasyGost/master/gost.sh
         echo -e "更新完成"
         exit 0
         ;;
@@ -896,12 +896,12 @@ update_sh() {
 
 update_sh
 echo && echo -e "                 gost 一键安装配置脚本"${Red_font_prefix}[${shell_version}]${Font_color_suffix}"
-  ----------- KANIKIG -----------
+  ----------- lusalem -----------
   特性: (1)本脚本采用systemd及gost配置文件对gost进行管理
         (2)能够在不借助其他工具(如screen)的情况下实现多条转发规则同时生效
         (3)机器reboot后转发不失效
   功能: (1)tcp+udp不加密转发, (2)中转机加密转发, (3)落地机解密对接转发
-  帮助文档：https://github.com/KANIKIG/Multi-EasyGost
+  帮助文档：https://github.com/lusalem/Multi-EasyGost
 
  ${Green_font_prefix}1.${Font_color_suffix} 安装 gost
  ${Green_font_prefix}2.${Font_color_suffix} 更新 gost
