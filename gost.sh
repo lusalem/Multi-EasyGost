@@ -131,8 +131,10 @@ function Install_ct() {
   fi
 }
 function Uninstall_ct() {
+  systemctl stop gostv2
   rm -rf /usr/bin/gostv2
   rm -rf /usr/lib/systemd/system/gostv2.service
+  rm -rf /etc/systemd/system/multi-user.target.wants/gostv2.service
   rm -rf /etc/gost
   rm -rf "$(pwd)"/gost.sh
   echo "gost已经成功删除"
