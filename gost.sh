@@ -111,8 +111,8 @@ function Install_ct() {
     mv gost-linux-"$bit"-"$ct_new_ver" gostv2
     mv gostv2 /usr/bin/gostv2
     chmod -R 777 /usr/bin/gostv2
-    wget --no-check-certificate https://gh.sswiwi.com/https://raw.githubusercontent.com/lusalem/Multi-EasyGost/master/gostv2.service && chmod -R 777 gostv2.service && mv gostv2.service /usr/lib/systemd/system
-    mkdir /etc/gost && wget --no-check-certificate https://gh.sswiwi.com/https://raw.githubusercontent.com/lusalem/Multi-EasyGost/master/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
+    wget --no-check-certificate https://gh.sswiwi.com/https://raw.githubusercontent.com/lusalem/Multi-EasyGost/refs/heads/china/gostv2.service && chmod -R 777 gostv2.service && mv gostv2.service /usr/lib/systemd/system
+    mkdir /etc/gost && wget --no-check-certificate https://gh.sswiwi.com/https://raw.githubusercontent.com/lusalem/Multi-EasyGost/refs/heads/china/config.json && mv config.json /etc/gost && chmod -R 777 /etc/gost
   fi
 
   systemctl enable gostv2 && systemctl restart gostv2
@@ -874,14 +874,14 @@ cron_restart() {
 }
 
 update_sh() {
-  ol_version=$(curl -L -s --connect-timeout 5 https://gh.sswiwi.com/https://raw.githubusercontent.com/lusalem/Multi-EasyGost/master/gost.sh | grep "shell_version=" | head -1 | awk -F '=|"' '{print $3}')
+  ol_version=$(curl -L -s --connect-timeout 5 https://gh.sswiwi.com/https://raw.githubusercontent.com/lusalem/Multi-EasyGost/refs/heads/china/gost.sh | grep "shell_version=" | head -1 | awk -F '=|"' '{print $3}')
   if [ -n "$ol_version" ]; then
     if [[ "$shell_version" != "$ol_version" ]]; then
       echo -e "存在新版本，是否更新 [Y/N]?"
       read -r update_confirm
       case $update_confirm in
       [yY][eE][sS] | [yY])
-        wget -N --no-check-certificate https://gh.sswiwi.com/https://raw.githubusercontent.com/lusalem/Multi-EasyGost/master/gost.sh
+        wget -N --no-check-certificate https://gh.sswiwi.com/https://raw.githubusercontent.com/lusalem/Multi-EasyGost/refs/heads/china/gost.sh
         echo -e "更新完成"
         exit 0
         ;;
